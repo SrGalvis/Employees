@@ -1,4 +1,3 @@
-using Employees.Shared.Entities;
 using Employees.Shared.Responses;
 
 namespace Employees.Backend.Repositories_Interfaces;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Employees.Shared.Entities;
 
-namespace Orders.Backend.Data;
+namespace Employees.Backend.Data;
 
 public class DataContext : DbContext
 {

@@ -1,5 +1,4 @@
 ﻿using Employees.Shared.Entities;
-using Orders.Backend.Data;
 
 namespace Employees.Backend.Data;
 

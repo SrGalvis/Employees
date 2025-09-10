@@ -4,7 +4,6 @@ using Employees.Backend.Repositories_Interfaces;
 using Employees.Backend.UnitsOfWork_Implementations;
 using Employees.Backend.UnitsOfWork_Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Orders.Backend.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

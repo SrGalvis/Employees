@@ -2,7 +2,7 @@
 using Employees.Shared.Entities;
 using Employees.Shared.Responses;
 using Microsoft.EntityFrameworkCore;
-using Orders.Backend.Data;
+using Employees.Backend.Data;
 
 namespace Employees.Backend.Repositories_Implementations;
 

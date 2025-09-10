@@ -2,9 +2,7 @@
 using Employees.Shared.Entities;
 using Employees.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Orders.Backend.Data;
-using System.Diagnostics.Metrics;
+using Employees.Backend.Data;
 
 namespace Employees.Backend.Controllers;
 

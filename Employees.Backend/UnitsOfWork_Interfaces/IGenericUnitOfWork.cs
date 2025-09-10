@@ -1,0 +1,19 @@
+﻿using Employees.Shared.Entities;
+using Employees.Shared.Responses;
+
+namespace Employees.Backend.UnitsOfWork_Interfaces;
+
+public interface IGenericUnitOfWork<T> where T : class
+{
+    Task<ActionResponse<IEnumerable<T>>> GetAsync();
+
+    Task<ActionResponse<T>> AddAsync(T model);
+
+    Task<ActionResponse<T>> UpdateAsync(T model);
+
+    Task<ActionResponse<T>> DeleteAsync(int id);
+
+    Task<ActionResponse<T>> GetAsync(int id);
+
+    Task<ActionResponse<IEnumerable<Employee>>> GetByNameAsync(string search);
+}

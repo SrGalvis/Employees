@@ -1,4 +1,5 @@
 ﻿using Employees.Shared.Entities;
+using Employees.Backend.Data;
 
 namespace Employees.Backend.Data;
 

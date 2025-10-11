@@ -1,8 +1,11 @@
 ﻿using Employees.Backend.Data;
 using Employees.Backend.Repositories.Interfaces;
+using Employees.Shared.DTOs;
 using Employees.Shared.Entities;
 using Employees.Shared.Responses;
 using Microsoft.EntityFrameworkCore;
+using Employees.Backend.Helpers;
+using System.Diagnostics.Metrics;
 
 namespace Employees.Backend.Repositories.Implementations;
 
@@ -18,7 +21,7 @@ public class EmployeesRepository : GenericRepository<Employee>, IEmployeesReposi
     public override async Task<ActionResponse<IEnumerable<Employee>>> GetAsync()
     {
         var employees = await _context.Employees
-            .Include(c => c.FirstName)
+            .OrderBy(x => x.FirstName)
             .ToListAsync();
         return new ActionResponse<IEnumerable<Employee>>
         {
@@ -32,7 +35,7 @@ public class EmployeesRepository : GenericRepository<Employee>, IEmployeesReposi
         var employees = await _context.Employees
              .Include(c => c.FirstName!)
             // .ThenInclude(s => s.)
-             .FirstOrDefaultAsync(c => c.Id == id);
+             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (employees == null)
         {
@@ -47,6 +50,22 @@ public class EmployeesRepository : GenericRepository<Employee>, IEmployeesReposi
         {
             WasSuccess = true,
             Result = employees
+        };
+    }
+
+    public override async Task<ActionResponse<IEnumerable<Employee>>> GetAsync(PaginationDTO pagination)
+    {
+        var queryable = _context.Employees
+            .Include(c => c.FirstName)
+            .AsQueryable();
+
+        return new ActionResponse<IEnumerable<Employee>>
+        {
+            WasSuccess = true,
+            Result = await queryable
+                .OrderBy(x => x.FirstName)
+                .Paginate(pagination)
+                .ToListAsync()
         };
     }
 

@@ -1,8 +1,8 @@
 using Employees.Backend.Data;
-using Employees.Backend.Repositories_Implementations;
-using Employees.Backend.Repositories_Interfaces;
-using Employees.Backend.UnitsOfWork_Implementations;
-using Employees.Backend.UnitsOfWork_Interfaces;
+using Employees.Backend.Repositories.Implementations;
+using Employees.Backend.Repositories.Interfaces;
+using Employees.Backend.UnitsOfWork.Implementations;
+using Employees.Backend.UnitsOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +14,10 @@ builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name=LocalConnec
 
 builder.Services.AddScoped(typeof(IGenericUnitOfWork<>), typeof(GenericUnitOfWork<>));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
+builder.Services.AddScoped<IEmployeesUnitOfWork, EmployeesUnitOfWork>();
+
 builder.Services.AddTransient<SeedDb>();
 
 var app = builder.Build();

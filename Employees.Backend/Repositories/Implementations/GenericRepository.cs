@@ -1,10 +1,12 @@
-﻿using Employees.Backend.Repositories_Interfaces;
+﻿using Employees.Backend.Data;
+using Employees.Backend.Helpers;
+using Employees.Backend.Repositories.Interfaces;
+using Employees.Shared.DTOs;
 using Employees.Shared.Entities;
 using Employees.Shared.Responses;
 using Microsoft.EntityFrameworkCore;
-using Employees.Backend.Data;
 
-namespace Employees.Backend.Repositories_Implementations;
+namespace Employees.Backend.Repositories.Implementations;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
@@ -117,6 +119,31 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             return ExceptionActionResponse(exception);
         }
     }
+
+    public virtual async Task<ActionResponse<IEnumerable<T>>> GetAsync(PaginationDTO pagination)
+    {
+        var queryable = _entity.AsQueryable();
+
+        return new ActionResponse<IEnumerable<T>>
+        {
+            WasSuccess = true,
+            Result = await queryable
+                .Paginate(pagination)
+                .ToListAsync()
+        };
+    }
+
+    public virtual async Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination)
+    {
+        var queryable = _entity.AsQueryable();
+        double count = await queryable.CountAsync();
+        return new ActionResponse<int>
+        {
+            WasSuccess = true,
+            Result = (int)count
+        };
+    }
+
 
     private ActionResponse<T> ExceptionActionResponse(Exception exception)
     {

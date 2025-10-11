@@ -1,8 +1,8 @@
-﻿using Employees.Backend.UnitsOfWork_Interfaces;
-using Employees.Shared.Entities;
+﻿using Employees.Shared.Entities;
 using Employees.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Employees.Backend.Data;
+using Employees.Backend.UnitsOfWork.Interfaces;
 
 namespace Employees.Backend.Controllers;
 

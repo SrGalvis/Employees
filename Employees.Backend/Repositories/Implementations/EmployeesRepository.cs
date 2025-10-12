@@ -33,8 +33,8 @@ public class EmployeesRepository : GenericRepository<Employee>, IEmployeesReposi
     public override async Task<ActionResponse<Employee>> GetAsync(int id)
     {
         var employees = await _context.Employees
-             .Include(c => c.FirstName!)
-            // .ThenInclude(s => s.)
+             .Include(x => x.FirstName!)
+             .Include(x => x.LastName)
              .FirstOrDefaultAsync(x => x.Id == id);
 
         if (employees == null)
@@ -56,14 +56,21 @@ public class EmployeesRepository : GenericRepository<Employee>, IEmployeesReposi
     public override async Task<ActionResponse<IEnumerable<Employee>>> GetAsync(PaginationDTO pagination)
     {
         var queryable = _context.Employees
-            .Include(c => c.FirstName)
+            .Include(x => x.FirstName)
+            .Include(x => x.LastName)
             .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(pagination.Filter))
+        {
+            queryable = queryable.Where(x => x.FirstName.ToLower().Contains(pagination.Filter.ToLower()));
+        }
 
         return new ActionResponse<IEnumerable<Employee>>
         {
             WasSuccess = true,
             Result = await queryable
                 .OrderBy(x => x.FirstName)
+                .Include(x => x.LastName)
                 .Paginate(pagination)
                 .ToListAsync()
         };

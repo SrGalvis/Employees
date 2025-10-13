@@ -3,7 +3,6 @@ using Employees.Frontend.Repositories;
 using Employees.Shared.Entities;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System.Diagnostics.Metrics;
 using System.Net;
 
 namespace Employees.Frontend.Components.Pages.Employees;
@@ -51,44 +50,12 @@ public partial class EmployeesIndex
         loading = false;
     }
 
-    /*
-    private async Task<TableData<Employee>> LoadListAsync(TableState state, CancellationToken cancellationToken)
-    {
-        int page = state.Page + 1;
-        int pageSize = state.PageSize;
-        var url = $"{baseUrl}/paginated/?page={page}&recordsnumber={pageSize}";
-
-        if (!string.IsNullOrWhiteSpace(Filter))
-        {
-            url += $"&filter={Filter}";
-        }
-
-        var responseHttp = await Repository.GetAsync<List<Employee>>(url);
-        if (responseHttp.Error)
-        {
-            var message = await responseHttp.GetErrorMessageAsync();
-            Snackbar.Add(message!, Severity.Error);
-            return new TableData<Employee> { Items = [], TotalItems = 0 };
-        }
-        if (responseHttp.Response == null)
-        {
-            return new TableData<Employee> { Items = [], TotalItems = 0 };
-        }
-        return new TableData<Employee>
-        {
-            Items = responseHttp.Response,
-            TotalItems = totalRecords
-        };
-    }
-*/
-
     private async Task<TableData<Employee>> LoadListAsync(TableState state, CancellationToken cancellationToken)
     {
         int page = state.Page + 1;
         int pageSize = state.PageSize;
         string url;
 
-        // Si hay filtro, usar endpoint /search
         if (!string.IsNullOrWhiteSpace(Filter))
         {
             url = $"{baseUrl}/search?value={Filter}";
@@ -111,7 +78,6 @@ public partial class EmployeesIndex
             return new TableData<Employee> { Items = [], TotalItems = 0 };
         }
 
-        // Si estás en modo búsqueda, no tiene sentido paginar el total
         int total = string.IsNullOrWhiteSpace(Filter) ? totalRecords : responseHttp.Response.Count;
 
         return new TableData<Employee>
@@ -188,6 +154,4 @@ public partial class EmployeesIndex
         await table.ReloadServerData();
         Snackbar.Add("Registro borrado", Severity.Success);
     }
-
-
 }

@@ -53,27 +53,25 @@ public class EmployeesRepository : GenericRepository<Employee>, IEmployeesReposi
         };
     }
 
-    public override async Task<ActionResponse<IEnumerable<Employee>>> GetAsync(PaginationDTO pagination)
+    public async Task<ActionResponse<IEnumerable<Employee>>> GetAsync(PaginationDTO pagination)
     {
-        var queryable = _context.Employees
-            .Include(x => x.FirstName)
-            .Include(x => x.LastName)
-            .AsQueryable();
+        var query = _context.Employees.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(pagination.Filter))
         {
-            queryable = queryable.Where(x => x.FirstName.ToLower().Contains(pagination.Filter.ToLower()));
+            var filter = pagination.Filter.ToLower();
+            query = query.Where(e =>
+                e.FirstName.ToLower().Contains(filter) ||
+                e.LastName.ToLower().Contains(filter));
         }
 
-        return new ActionResponse<IEnumerable<Employee>>
-        {
-            WasSuccess = true,
-            Result = await queryable
-                .OrderBy(x => x.FirstName)
-                .Include(x => x.LastName)
-                .Paginate(pagination)
-                .ToListAsync()
-        };
+        var employees = await query
+            .OrderBy(e => e.FirstName)
+            .Skip((pagination.Page - 1) * pagination.RecordsNumber)
+            .Take(pagination.RecordsNumber)
+            .ToListAsync();
+
+        return new ActionResponse<IEnumerable<Employee>> { WasSuccess = true, Result = employees };
     }
 
 }

@@ -4,7 +4,7 @@ using Employees.Shared.Responses;
 
 namespace Employees.Backend.UnitsOfWork.Interfaces;
 
-public interface IEmployeesUnitOfWork
+public interface IEmployeesUnitOfWork : IGenericUnitOfWork<Employee>
 {
     public interface IEmployeesUnitOfWork
     {
@@ -15,5 +15,6 @@ public interface IEmployeesUnitOfWork
         Task<ActionResponse<IEnumerable<Employee>>> GetAsync(PaginationDTO pagination);
 
         Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination);
+        Task<ActionResponse<IEnumerable<Employee>>> GetByNameAsync(string value);
     }
 }

@@ -19,15 +19,16 @@ public class EmployeesController : GenericController<Employee>
     }
 
     [HttpGet("search")]
-    public async Task<ActionResult<ActionResponse<IEnumerable<Employee>>>> GetByName([FromQuery] string value)
+    public async Task<ActionResult<IEnumerable<Employee>>> GetByName([FromQuery] string value)
     {
         var response = await _unit.GetByNameAsync(value);
         if (!response.WasSuccess)
         {
-            return NotFound(response);
+            return NotFound();
         }
-        return Ok(response);
+        return Ok(response.Result);
     }
+
 
     [HttpGet("paginated")]
     public override async Task<IActionResult> GetAsync(PaginationDTO pagination)

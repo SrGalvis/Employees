@@ -15,4 +15,5 @@ public interface IEmployeesRepository
 
     Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination);
 
+    Task<ActionResponse<IEnumerable<Employee>>> GetByNameAsync(string search);
 }

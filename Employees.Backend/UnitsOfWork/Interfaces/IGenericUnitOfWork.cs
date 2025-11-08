@@ -22,4 +22,5 @@ public interface IGenericUnitOfWork<T> where T : class
 
     Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination);
 
+
 }

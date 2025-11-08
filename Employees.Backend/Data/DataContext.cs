@@ -1,9 +1,10 @@
 ﻿using Employees.Shared.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Employees.Backend.Data;
 
-public class DataContext : DbContext
+public class DataContext : IdentityDbContext<User>
 {
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
@@ -22,6 +23,7 @@ public class DataContext : DbContext
         modelBuilder.Entity<Country>().HasIndex(c => c.Name).IsUnique();
         modelBuilder.Entity<State>().HasIndex(s => new { s.CountryId, s.Name }).IsUnique();
         DisableCascadingDelete(modelBuilder);
+        modelBuilder.Entity<Employee>().Property(e => e.Salary).HasPrecision(18, 2);
     }
 
     private void DisableCascadingDelete(ModelBuilder modelBuilder)

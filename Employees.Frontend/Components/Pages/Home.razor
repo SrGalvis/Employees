@@ -2,6 +2,13 @@
 
 <PageTitle>Inicio</PageTitle>
 
-<MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
+<AuthorizeView>
+    <Authorized>
+        <MudText Typo="Typo.h3" Class="m-2" GutterBottom="true">Estas autenticado</MudText>
+    </Authorized>
+    <NotAuthorized>
+        <MudText Typo="Typo.h3" Class="m-2" GutterBottom="true">No estas autenticado</MudText>
+    </NotAuthorized>
+</AuthorizeView>
 
-
+<MudText Class="m-2">Employees sistema de empleados ejemplo para el curso de Servicios WEB 2025-II</MudText>

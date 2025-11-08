@@ -1,5 +1,6 @@
 ﻿using Employees.Shared.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Employees.Shared.Entities;
 
@@ -13,7 +14,7 @@ public class State : IEntityWithName
     public string Name { get; set; } = null!;
 
     public int CountryId { get; set; }
-
+    [JsonIgnore]
     public Country? Country { get; set; }
 
     public ICollection<City>? Cities { get; set; }

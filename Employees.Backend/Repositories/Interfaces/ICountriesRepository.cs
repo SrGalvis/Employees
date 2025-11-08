@@ -15,6 +15,5 @@ public interface ICountriesRepository
 
     Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination);
 
-
     //    Task<ActionResponse<IEnumerable<Country>>> GetByNameAsync(string search);
 }

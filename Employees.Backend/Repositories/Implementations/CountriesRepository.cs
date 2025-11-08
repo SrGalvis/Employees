@@ -1,11 +1,12 @@
 ﻿using Employees.Backend.Data;
+using Employees.Backend.Helpers;
 using Employees.Backend.Repositories.Interfaces;
 using Employees.Shared.DTOs;
 using Employees.Shared.Entities;
 using Employees.Shared.Responses;
 using Microsoft.EntityFrameworkCore;
-using Employees.Backend.Helpers;
 using System.Diagnostics.Metrics;
+using System.Linq;
 
 namespace Employees.Backend.Repositories.Implementations;
 
@@ -33,14 +34,16 @@ public class CountriesRepository : GenericRepository<Country>, ICountriesReposit
     public override async Task<ActionResponse<Country>> GetAsync(int id)
     {
         var countries = await _context.Countries
-             .FirstOrDefaultAsync(x => x.Id == id);
+            .Include(x => x.States!)
+            .ThenInclude(s => s.Cities!)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (countries == null)
         {
             return new ActionResponse<Country>
             {
                 WasSuccess = false,
-                Message = "Pais no existe"
+                Message = "El país no existe."
             };
         }
 
@@ -51,24 +54,43 @@ public class CountriesRepository : GenericRepository<Country>, ICountriesReposit
         };
     }
 
+
     public async Task<ActionResponse<IEnumerable<Country>>> GetAsync(PaginationDTO pagination)
     {
-        var query = _context.Countries.AsQueryable();
+        var queryable = _context.Countries
+            .Include(c => c.States)
+            .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(pagination.Filter))
         {
-            var filter = pagination.Filter.ToLower();
-            query = query.Where(e =>
-                e.Name.ToLower().Contains(filter));
+            queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
         }
 
-        var countries = await query
-            .OrderBy(e => e.Name)
-            .Skip((pagination.Page - 1) * pagination.RecordsNumber)
-            .Take(pagination.RecordsNumber)
-            .ToListAsync();
+        return new ActionResponse<IEnumerable<Country>>
+        {
+            WasSuccess = true,
+            Result = await queryable
+                .OrderBy(c => c.Name)
+                .Paginate(pagination)
+                .ToListAsync()
+        };
+    }
 
-        return new ActionResponse<IEnumerable<Country>> { WasSuccess = true, Result = countries };
+    public override async Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination)
+    {
+        var queryable = _context.Countries.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(pagination.Filter))
+        {
+            queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+        }
+
+        double count = await queryable.CountAsync();
+        return new ActionResponse<int>
+        {
+            WasSuccess = true,
+            Result = (int)count
+        };
     }
 
 }

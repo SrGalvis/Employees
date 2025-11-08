@@ -33,7 +33,6 @@ public class CountriesRepository : GenericRepository<Country>, ICountriesReposit
     public override async Task<ActionResponse<Country>> GetAsync(int id)
     {
         var countries = await _context.Countries
-             .Include(x => x.Name!)
              .FirstOrDefaultAsync(x => x.Id == id);
 
         if (countries == null)
@@ -41,7 +40,7 @@ public class CountriesRepository : GenericRepository<Country>, ICountriesReposit
             return new ActionResponse<Country>
             {
                 WasSuccess = false,
-                Message = "Empleado no existe"
+                Message = "Pais no existe"
             };
         }
 

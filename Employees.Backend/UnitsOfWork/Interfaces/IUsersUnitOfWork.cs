@@ -1,4 +1,5 @@
-﻿using Employees.Shared.Entities;
+﻿using Employees.Shared.DTOs;
+using Employees.Shared.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Employees.Backend.UnitsOfWork.Interfaces;
@@ -14,4 +15,8 @@ public interface IUsersUnitOfWork
     Task AddUserToRoleAsync(User user, string roleName);
 
     Task<bool> IsUserInRoleAsync(User user, string roleName);
+
+    Task<SignInResult> LoginAsync(LoginDTO model);
+
+    Task LogoutAsync();
 }

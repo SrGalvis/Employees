@@ -1,9 +1,12 @@
 ﻿using Employees.Backend.UnitsOfWork.Interfaces;
 using Employees.Shared.DTOs;
 using Employees.Shared.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Employees.Backend.Controllers;
+
+//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
 [ApiController]
 [Route("api/[controller]")]

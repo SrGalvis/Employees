@@ -14,7 +14,6 @@ public class State : IEntityWithName
     public string Name { get; set; } = null!;
 
     public int CountryId { get; set; }
-    [JsonIgnore]
     public Country? Country { get; set; }
 
     public ICollection<City>? Cities { get; set; }

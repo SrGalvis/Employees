@@ -16,9 +16,13 @@ public class CitiesUnitOfWork : GenericUnitOfWork<City>, ICitiesUnitOfWork
         _citiesRepository = citiesRepository;
     }
 
+    public override async Task<ActionResponse<IEnumerable<City>>> GetAsync() =>
+    await _citiesRepository.GetAsync();
+
+    public override async Task<ActionResponse<City>> GetAsync(int id) =>
+        await _citiesRepository.GetAsync(id);
+
     public override async Task<ActionResponse<IEnumerable<City>>> GetAsync(PaginationDTO pagination) => await _citiesRepository.GetAsync(pagination);
 
     public override async Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination) => await _citiesRepository.GetTotalRecordsAsync(pagination);
-
 }
-

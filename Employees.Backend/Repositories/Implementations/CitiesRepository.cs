@@ -17,6 +17,39 @@ public class CitiesRepository : GenericRepository<City>, ICitiesRepository
         _context = context;
     }
 
+    public override async Task<ActionResponse<IEnumerable<City>>> GetAsync()
+    {
+        var cities = await _context.Cities
+            .OrderBy(x => x.Name)
+            .ToListAsync();
+        return new ActionResponse<IEnumerable<City>>
+        {
+            WasSuccess = true,
+            Result = cities
+        };
+    }
+
+    public override async Task<ActionResponse<City>> GetAsync(int id)
+    {
+        var cities = await _context.Cities
+             .FirstOrDefaultAsync(s => s.Id == id);
+
+        if (cities == null)
+        {
+            return new ActionResponse<City>
+            {
+                WasSuccess = false,
+                Message = "Estado no existe"
+            };
+        }
+
+        return new ActionResponse<City>
+        {
+            WasSuccess = true,
+            Result = cities
+        };
+    }
+
     public override async Task<ActionResponse<IEnumerable<City>>> GetAsync(PaginationDTO pagination)
     {
         var queryable = _context.Cities

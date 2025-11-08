@@ -55,7 +55,7 @@ public class StatesRepository : GenericRepository<State>, IStatesRepository
     {
         var queryable = _context.States
             .Include(x => x.Cities)
-            .Where(x => x.Country!.Id == pagination.Id)
+            .Where(x => x.CountryId == pagination.Id)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(pagination.Filter))
@@ -90,7 +90,7 @@ public class StatesRepository : GenericRepository<State>, IStatesRepository
         return new ActionResponse<int>
         {
             WasSuccess = true,
-            Result = totalPages
+            Result = (int)count
         };
 
     }

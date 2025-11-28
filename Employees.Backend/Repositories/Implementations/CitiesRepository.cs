@@ -89,5 +89,14 @@ public class CitiesRepository : GenericRepository<City>, ICitiesRepository
             Result = (int)count
         };
     }
+
+    public async Task<IEnumerable<City>> GetComboAsync(int stateId)
+    {
+        return await _context.Cities
+            .Where(c => c.StateId == stateId)
+            .OrderBy(c => c.Name)
+            .ToListAsync();
+    }
+
 }
 

@@ -1,5 +1,4 @@
 ﻿using Employees.Backend.Repositories.Interfaces;
-using Employees.Backend.Repositories.Implementations;
 using Employees.Backend.UnitsOfWork.Interfaces;
 using Employees.Shared.DTOs;
 using Employees.Shared.Entities;
@@ -25,4 +24,6 @@ public class CitiesUnitOfWork : GenericUnitOfWork<City>, ICitiesUnitOfWork
     public override async Task<ActionResponse<IEnumerable<City>>> GetAsync(PaginationDTO pagination) => await _citiesRepository.GetAsync(pagination);
 
     public override async Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination) => await _citiesRepository.GetTotalRecordsAsync(pagination);
+
+    public async Task<IEnumerable<City>> GetComboAsync(int stateId) => await _citiesRepository.GetComboAsync(stateId);
 }

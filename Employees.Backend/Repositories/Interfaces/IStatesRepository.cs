@@ -15,4 +15,5 @@ public interface IStatesRepository
 
     Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination);
 
+    Task<IEnumerable<State>> GetComboAsync(int countryId);
 }
